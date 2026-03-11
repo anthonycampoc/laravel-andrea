@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guía Didáctica Completa de Laravel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+        }
+        code, pre {
+            background-color: #f8f9fa;
+            color: #c7254e;
+            padding: 6px;
+            border-radius: 6px;
+        }
+        pre {
+            padding: 15px;
+        }
+        .section-title {
+            border-left: 6px solid #0d6efd;
+            padding-left: 12px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+
+    <h1 class="text-center mb-3">
+        <i class="bi bi-book"></i> Guía Completa de Laravel
+    </h1>
+
+    <h3 class="section-title"><i class="bi bi-rocket-takeoff"></i> Inicializar Proyecto (Desde CMD con XAMPP)</h3>
+
+    <div class="card mb-5 shadow-sm">
+        <div class="card-body">
+            <p>Sigue estos pasos en tu terminal para crear el proyecto en la carpeta de servidor local:</p>
+            
+            <ol class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>1. Abrir CMD:</strong> Presiona <kbd>Win + R</kbd>, escribe <code>cmd</code> y presiona Enter.
+                </li>
+                <li class="list-group-item">
+                    <strong>2. Salir a la raíz del disco C:</strong>
+                    <pre class="mt-2"><code>cd ..</code>
+            <code>cd ..</code></pre>
+                </li>
+                <li class="list-group-item">
+                    <strong>3. Entrar a la carpeta de XAMPP:</strong>
+                    <pre class="mt-2"><code>cd xampp/htdocs</code></pre>
+                </li>
+                <li class="list-group-item">
+                    <strong>4. Crear el proyecto Laravel 12:</strong>
+                    <p class="text-muted small">Copia y pega el comando (cambia "mi-proyecto" por el nombre que quieras):</p>
+                    <pre class="mt-2"><code>composer create-project laravel/laravel:^12.0 mi-proyecto</code></pre>
+                </li>
+                <li class="list-group-item">
+                    <strong>5. Acceder a la carpeta creada:</strong>
+                    <pre class="mt-2"><code>cd mi-proyecto</code></pre>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>6. Abrir en Visual Studio Code:</strong>
+                    <p class="text-muted small">Estando dentro de la carpeta, escribe el siguiente comando para abrir el editor automáticamente:</p>
+                    <pre class="mt-2"><code>code .</code></pre>
+                </li>
+            </ol>
+            
+            <div class="alert alert-info mt-3 mb-0">
+                <i class="bi bi-info-circle"></i> <strong>Nota:</strong> Una vez creado, recuerda que para ver tu proyecto en el navegador debes ejecutar <code>php artisan serve</code> o configurar un VirtualHost en XAMPP.
+            </div>
+        </div>
+    </div>
+
+    <h3 class="section-title"><i class="bi bi-database-fill-gear"></i> Configuración de Base de Datos</h3>
+
+    <div class="card mb-5 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title text-primary"><i class="bi bi-gear-wide-connected"></i> 1. Activar Servidores en XAMPP</h5>
+            <p>Abre el <strong>XAMPP Control Panel</strong> y asegúrate de que los módulos estén en verde:</p>
+            <ul>
+                <li><strong>Apache:</strong> Servidor web.</li>
+                <li><strong>MySQL:</strong> Gestor de base de datos.</li>
+            </ul>
+
+            <h5 class="card-title text-primary mt-4"><i class="bi bi-plus-circle"></i> 2. Crear Base de Datos en phpMyAdmin</h5>
+            <ol>
+                <li>En tu navegador, ve a: <code>http://localhost/phpmyadmin</code></li>
+                <li>Haz clic en <strong>"Nueva"</strong> (New).</li>
+                <li>Escribe el nombre de tu base de datos (ejemplo: <code>db_proyecto</code>).</li>
+                <li>Haz clic en <strong>"Crear"</strong>.</li>
+            </ol>
+
+            <h5 class="card-title text-primary mt-4"><i class="bi bi-filetype-exe"></i> 3. Configurar el archivo .env</h5>
+            <p>Abre tu proyecto en VS Code, busca el archivo <code>.env</code> en la raíz y modifica estas líneas:</p>
+            
+            <pre><code>DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_proyecto  <-- Pon aquí el nombre que creaste
+DB_USERNAME=root         <-- Usuario por defecto en XAMPP
+DB_PASSWORD=             <-- Déjalo vacío (en XAMPP no tiene clave)</code></pre>
+
+            <div class="alert alert-warning mt-3 mb-0">
+                <i class="bi bi-exclamation-triangle"></i> <strong>Importante:</strong> Después de cambiar el archivo <code>.env</code>, es recomendable limpiar la caché con: 
+                <br><code>php artisan config:clear</code><br><code>php artisan config:config</code>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="section-title"><i class="bi bi-check2-circle"></i> Verificar Conexión y Crear Tablas</h3>
+
+    <div class="card mb-5 shadow-sm border-success">
+        <div class="card-body">
+            <p>Una vez configurado el archivo <code>.env</code>, debemos comprobar si Laravel puede comunicarse con MySQL ejecutando las migraciones iniciales.</p>
+            
+            <h5 class="card-title text-success"><i class="bi bi-terminal-fill"></i> Ejecutar Migración</h5>
+            <p>Abre la terminal (dentro de VS Code o en el CMD) y escribe:</p>
+            <pre class="bg-dark text-black p-3"><code>php artisan migrate</code></pre>
+
+            <h5 class="card-title mt-4"><i class="bi bi-question-circle"></i> ¿Cómo saber si funcionó?</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>En la Terminal:</strong></p>
+                    <p class="text-success small">
+                        <i class="bi bi-check-lg"></i> Preparing database...<br>
+                        <i class="bi bi-check-lg"></i> Creating migration table...<br>
+                        <i class="bi bi-check-lg"></i> Running migrations... DONE
+                    </p>
+                </div>
+                <div class="col-md-6 border-start">
+                    <p class="mb-1"><strong>En phpMyAdmin:</strong></p>
+                    <p class="small text-muted">
+                        Refresca tu base de datos; deberías ver tablas como <code>users</code>, <code>jobs</code>, <code>migrations</code>, etc.
+                    </p>
+                </div>
+            </div>
+
+            <div class="alert alert-danger mt-4 mb-0">
+                <h6 class="alert-heading"><i class="bi bi-exclamation-octagon"></i> Errores Comunes:</h6>
+                <ul class="mb-0 small">
+                    <li><strong>"Unknown database":</strong> El nombre en <code>DB_DATABASE</code> no coincide con el de phpMyAdmin.</li>
+                    <li><strong>"Connection refused":</strong> MySQL en el Panel de XAMPP no está encendido (botón Start).</li>
+                    <li><strong>"Access denied":</strong> Revisa que el <code>DB_USERNAME</code> sea <code>root</code> y el password esté vacío.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- ================= COMANDOS ARTISAN ================= -->
+    <h3 class="section-title"><i class="bi bi-terminal"></i> Comandos Básicos de Artisan</h3>
+
+    <div class="accordion mb-5" id="artisan">
+
+        <!-- serve -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#serve">
+                    php artisan serve
+                </button>
+            </h2>
+            <div id="serve" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    Inicia el servidor de desarrollo local.<br>
+                    Normalmente corre en <code>http://127.0.0.1:8000</code>.
+                </div>
+            </div>
+        </div>
+
+        <!-- make -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#make">
+                    php artisan make:
+                </button>
+            </h2>
+            <div id="make" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    Permite crear archivos base del proyecto.
+                    <ul>
+                        <li><code>make:model</code></li>
+                        <li><code>make:controller</code></li>
+                        <li><code>make:migration</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- make model mc -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#makemc">
+                    php artisan make:model Producto -mc
+                </button>
+            </h2>
+            <div id="makemc" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    Crea automáticamente:
+                    <ul>
+                        <li>Modelo</li>
+                        <li>Controlador</li>
+                        <li>Migración</li>
+                    </ul>
+                    Ahorra tiempo y mantiene el orden del proyecto.
+                </div>
+            </div>
+        </div>
+
+        <!-- migrate -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#migrate">
+                    php artisan migrate
+                </button>
+            </h2>
+            <div id="migrate" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    Ejecuta las migraciones pendientes y crea las tablas en la base de datos.
+                </div>
+            </div>
+        </div>
+
+        <!-- migrate fresh -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed text-danger" data-bs-toggle="collapse" data-bs-target="#fresh">
+                    php artisan migrate:fresh
+                </button>
+            </h2>
+            <div id="fresh" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <strong>⚠️ Elimina todas las tablas y las vuelve a crear.</strong>
+                    <ul>
+                        <li>Usar solo en desarrollo</li>
+                        <li>Cuando hay errores de migración</li>
+                        <li>No usar en producción</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- optimize clear -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#optimize">
+                    php artisan optimize:clear
+                </button>
+            </h2>
+            <div id="optimize" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    Limpia todas las cachés del proyecto.<br>
+                    <strong>Usar cuando los cambios no se reflejan.</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- config clear -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed text-warning" data-bs-toggle="collapse" data-bs-target="#configclear">
+                    php artisan config:clear
+                </button>
+            </h2>
+            <div id="configclear" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    Limpia la caché de configuración.<br>
+                    <strong>Obligatorio después de modificar el archivo <code>.env</code>.</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- config cache -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#configcache">
+                    php artisan config:cache
+                </button>
+            </h2>
+            <div id="configcache" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    Guarda la configuración en caché para mejorar el rendimiento.<br>
+                    Recomendado en producción, no durante desarrollo activo.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= VISTAS ================= -->
+    <h3 class="section-title"><i class="bi bi-eye"></i> Creación de Vistas (Blade)</h3>
+
+    <div class="card mb-5">
+        <div class="card-body">
+            Las vistas en Laravel deben terminar con:
+            <pre><code>.blade.php</code></pre>
+
+            Ejemplo:
+            <pre><code>resources/views/productos/index.blade.php</code></pre>
+        </div>
+    </div>
+
+    <!-- ================= MODELO ================= -->
+    <h3 class="section-title"><i class="bi bi-database"></i> Modelo y $fillable</h3>
+
+    <div class="card mb-5">
+        <div class="card-body">
+<pre><code>
+class Producto extends Model
+{
+    protected $fillable = [
+        'nombre',
+        'precio',
+        'descripcion'
+    ];
+}
+</code></pre>
+            Permite insertar datos de forma segura usando <code>create()</code>.
+        </div>
+    </div>
+
+    <!-- ================= RUTAS CRUD ================= -->
+    <h3 class="section-title"><i class="bi bi-signpost"></i> Rutas CRUD</h3>
+
+<pre><code>
+Route::get('/productos', [ProductoController::class, 'index'])
+    ->name('productos.index');
+
+Route::get('/productos/create', [ProductoController::class, 'create'])
+    ->name('productos.create');
+
+Route::post('/productos', [ProductoController::class, 'store'])
+    ->name('productos.store');
+</code></pre>
+
+    <!-- ================= ROUTE NAME ================= -->
+    <h3 class="section-title"><i class="bi bi-link-45deg"></i> Uso de route() en Formularios</h3>
+
+<pre><code>
+&lt;form action="{{ route('productos.store') }}" method="POST"&gt;
+    @csrf
+&lt;/form&gt;
+</code></pre>
+
+    <p class="text-muted">
+        <code>->name()</code> permite renombrar rutas y usarlas fácilmente.
+    </p>
+
+    <!-- ================= FOREACH ================= -->
+    <h3 class="section-title"><i class="bi bi-repeat"></i> foreach en Blade</h3>
+
+<pre><code>
+@foreach ($productos as $producto)
+    &lt;p&gt;{{ $producto->nombre }} - {{ $producto->precio }}&lt;/p&gt;
+@endforeach
+</code></pre>
+
+    <!-- ================= FLUJO ================= -->
+    <h3 class="section-title"><i class="bi bi-diagram-3"></i> Flujo de Laravel</h3>
+
+    <ol class="list-group list-group-numbered mb-5">
+        <li class="list-group-item">Vista (Front / Formulario)</li>
+        <li class="list-group-item">Ruta (GET / POST)</li>
+        <li class="list-group-item">Controlador</li>
+        <li class="list-group-item">Modelo (Base de Datos)</li>
+        <li class="list-group-item">Retorna Vista</li>
+    </ol>
+
+    <footer class="text-center text-muted">
+        <hr>
+        Guía Académica Laravel • Uso Educativo
+    </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
