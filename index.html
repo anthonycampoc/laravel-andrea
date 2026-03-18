@@ -155,6 +155,186 @@ DB_PASSWORD=             <-- Déjalo vacío (en XAMPP no tiene clave)</code></pr
             </div>
         </div>
     </div>
+
+    <h3 class="section-title">
+    <i class="bi bi-diagram-3-fill"></i> Ejemplo Completo: Producto y Proveedor
+</h3>
+
+<div class="card mb-5 shadow-sm border-primary">
+    <div class="card-body">
+
+        <!-- 1 -->
+        <h5 class="text-primary">
+            <i class="bi bi-terminal-fill"></i> 1. Crear Modelos y Migraciones
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+php artisan make:model Proveedor -m
+php artisan make:model Producto -m
+</pre>
+
+        <!-- 2 -->
+        <h5 class="mt-4">
+            <i class="bi bi-database-fill"></i> 2. Migración: proveedores
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+Schema::create('proveedores', function (Blueprint $table) {
+    $table->id();
+    $table->string('nombre');
+    $table->string('correo')->nullable();
+    $table->timestamps();
+});
+</pre>
+
+        <!-- 3 -->
+        <h5 class="mt-4">
+            <i class="bi bi-database-fill"></i> 3. Migración: productos
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+Schema::create('productos', function (Blueprint $table) {
+    $table->id();
+
+    $table->string('nombre');
+    $table->decimal('precio', 10, 2);
+
+    $table->unsignedBigInteger('proveedor_id');
+
+    $table->foreign('proveedor_id')
+          ->references('id')
+          ->on('proveedores')
+          ->onDelete('cascade');
+
+    $table->timestamps();
+});
+</pre>
+
+        <!-- 4 -->
+        <h5 class="mt-4">
+            <i class="bi bi-boxes"></i> 4. Modelo Proveedor
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+class Proveedor extends Model
+{
+    protected $fillable = ['nombre', 'correo'];
+
+    public function productos()
+    {
+        return $this->hasMany(Producto::class);
+    }
+}
+</pre>
+
+        <!-- 5 -->
+        <h5 class="mt-4">
+            <i class="bi bi-box-fill"></i> 5. Modelo Producto
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+class Producto extends Model
+{
+    protected $fillable = ['nombre', 'precio', 'proveedor_id'];
+
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class);
+    }
+}
+</pre>
+
+        <!-- 6 -->
+        <h5 class="mt-4 text-success">
+            <i class="bi bi-play-circle-fill"></i> 6. Ejecutar Migraciones
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+php artisan migrate
+</pre>
+
+        <!-- 7 -->
+        <h5 class="mt-4">
+            <i class="bi bi-ui-checks"></i> 7. Mostrar Proveedores en un Select
+        </h5>
+
+<pre class="bg-dark text-white p-3 rounded">
+// Controlador
+public function crear()
+{
+    $proveedores = Proveedor::all();
+    return view('producto.crear', compact('proveedores'));
+}
+</pre>
+
+<pre class="bg-dark text-white p-3 rounded">
+&lt;select name="proveedor_id" class="form-control"&gt;
+    &lt;option value=""&gt;Seleccione un proveedor&lt;/option&gt;
+
+    @foreach($proveedores as $proveedor)
+        &lt;option value="{{ $proveedor->id }}"&gt;
+            {{ $proveedor->nombre }}
+        &lt;/option&gt;
+    @endforeach
+&lt;/select&gt;
+</pre>
+
+        <!-- 🔥 8 NUEVO -->
+        <h5 class="mt-4">
+            <i class="bi bi-link-45deg"></i> 8. Acceder al Proveedor desde Producto
+        </h5>
+
+        <p class="small text-muted">
+            Gracias a la relación <code>belongsTo</code>, podemos acceder al proveedor directamente desde el producto:
+        </p>
+
+<pre class="bg-dark text-white p-3 rounded">
+// En Blade (vista)
+@foreach($productos as $producto)
+    {{ $producto->nombre }} - 
+    {{ $producto->proveedor->nombre ?? 'Sin proveedor' }}
+@endforeach
+</pre>
+
+        <p class="small text-muted">
+            También en tabla:
+        </p>
+
+<pre class="bg-dark text-white p-3 rounded">
+&lt;table class="table"&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Producto&lt;/th&gt;
+        &lt;th&gt;Proveedor&lt;/th&gt;
+    &lt;/tr&gt;
+
+    @foreach($productos as $producto)
+    &lt;tr&gt;
+        &lt;td&gt;{{ $producto->nombre }}&lt;/td&gt;
+        &lt;td&gt;{{ $producto->proveedor->nombre ?? 'Sin proveedor' }}&lt;/td&gt;
+    &lt;/tr&gt;
+    @endforeach
+&lt;/table&gt;
+</pre>
+
+        <!-- DEFINICION -->
+        <div class="alert alert-info mt-4 small">
+            Relación <strong>uno a muchos</strong>: un proveedor puede tener muchos productos,
+            pero cada producto pertenece a un solo proveedor.
+        </div>
+
+        <!-- ERRORES -->
+        <div class="alert alert-danger mt-4 mb-0">
+            <h6><i class="bi bi-exclamation-octagon"></i> Errores Comunes:</h6>
+            <ul class="small mb-0">
+                <li>No definir la relación <code>belongsTo</code>.</li>
+                <li>No usar <code>proveedor_id</code>.</li>
+                <li>No usar <code>with('proveedor')</code> en el controlador.</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+    
     <!-- ================= COMANDOS ARTISAN ================= -->
     <h3 class="section-title"><i class="bi bi-terminal"></i> Comandos Básicos de Artisan</h3>
 
