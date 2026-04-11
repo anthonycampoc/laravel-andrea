@@ -575,7 +575,7 @@ Route::post('/productos', [ProductoController::class, 'store'])
 
         <p>
             En este apartado vamos a crear el módulo <code>Producto</code> en Laravel 
-            utilizando modelo, controlador, migración, rutas y AdminLTE.
+            utilizando modelo, controlador, migración, rutas y AdminLTE paso a paso.
         </p>
 
         <!-- PASO 1 -->
@@ -585,9 +585,7 @@ Route::post('/productos', [ProductoController::class, 'store'])
 
         <p>En la terminal ejecutamos el siguiente comando:</p>
 
-        <pre class="bg-dark text-black p-3">
-<code>php artisan make:model Producto -mc</code>
-        </pre>
+        <pre class="bg-dark text-black p-3"><code>php artisan make:model Producto -mc</code></pre>
 
         <p class="small text-muted">
             Este comando crea automáticamente tres archivos:
@@ -658,6 +656,10 @@ Schema::create('productos', function (Blueprint $table) {
 </code>
         </pre>
 
+        <p>Luego ejecutamos:</p>
+
+        <pre class="bg-dark text-black p-3"><code>php artisan migrate</code></pre>
+
         <!-- PASO 5 -->
         <h5 class="card-title mt-4">
             <i class="bi bi-5-circle"></i> Configurar el Controlador
@@ -675,7 +677,7 @@ public function index()
         </pre>
 
         <p class="small text-muted">
-            Debemos crear las carpetas dentro de <code>resources/views</code>
+            Debemos crear las carpetas dentro de:
         </p>
 
         <pre class="bg-light p-2 small">
@@ -684,35 +686,60 @@ resources/views/admin/producto/index.blade.php
 
         <!-- PASO 6 -->
         <h5 class="card-title mt-4">
-            <i class="bi bi-6-circle"></i> Configurar Ruta
+            <i class="bi bi-6-circle"></i> Plantilla Básica en la Vista
+        </h5>
+
+        <p>
+            En el archivo <code>index.blade.php</code> debemos colocar la plantilla básica de AdminLTE la podemos copiar y pegar en la archivo <code>index.blade.php</code> .
+        </p>
+
+        <pre class="bg-dark text-black p-3">
+<code>
+@extends('adminlte::page')
+
+@section('title', 'Producto')
+
+@section('content_header')
+    <h1>Lista de Productos</h1>
+@stop
+
+@section('content')
+    <p>Aquí va el contenido del módulo producto</p>
+@stop
+</code>
+        </pre>
+
+        <!-- PASO 7 -->
+        <h5 class="card-title mt-4">
+            <i class="bi bi-7-circle"></i> Configurar Ruta
         </h5>
 
         <p>En el archivo <code>routes/web.php</code> agregamos:</p>
 
         <pre class="bg-dark text-black p-3">
 <code>
+use App\Http\Controllers\ProductoController;
+
 Route::resource('/producto', ProductoController::class);
 </code>
         </pre>
 
-        <!-- PASO 7 -->
+        <!-- PASO 8 -->
         <h5 class="card-title mt-4">
-            <i class="bi bi-7-circle"></i> Verificar Rutas
+            <i class="bi bi-8-circle"></i> Verificar Rutas
         </h5>
 
         <p>Ejecutamos:</p>
 
-        <pre class="bg-dark text-black p-3">
-<code>php artisan route:list</code>
-        </pre>
+        <pre class="bg-dark text-black p-3"><code>php artisan route:list</code></pre>
 
-        <p class="small text-success">
+        <p class="text-success small">
             Aquí aparecerán todas las rutas del módulo producto.
         </p>
 
-        <!-- PASO 8 -->
+        <!-- PASO 9 -->
         <h5 class="card-title mt-4">
-            <i class="bi bi-8-circle"></i> Configurar AdminLTE
+            <i class="bi bi-9-circle"></i> Configurar AdminLTE
         </h5>
 
         <p>Ir al archivo:</p>
@@ -733,12 +760,12 @@ config/adminlte.php
 </code>
         </pre>
 
-        <!-- PASO 9 -->
+        <!-- PASO 10 -->
         <h5 class="card-title mt-4">
-            <i class="bi bi-9-circle"></i> Limpiar Configuración
+            <i class="bi bi-10-circle"></i> Limpiar Configuración
         </h5>
 
-        <p>Ejecutar los siguientes comandos:</p>
+        <p>Ejecutar:</p>
 
         <pre class="bg-dark text-black p-3">
 <code>
@@ -747,33 +774,31 @@ php artisan config:cache
 </code>
         </pre>
 
-        <!-- PASO 10 -->
+        <!-- PASO 11 -->
         <h5 class="card-title mt-4">
-            <i class="bi bi-10-circle"></i> Ejecutar la Aplicación
+            <i class="bi bi-11-circle"></i> Ejecutar la Aplicación
         </h5>
 
-        <pre class="bg-dark text-black p-3">
-<code>php artisan serve</code>
-        </pre>
+        <pre class="bg-dark text-black p-3"><code>php artisan serve</code></pre>
 
         <div class="alert alert-success mt-4 mb-0">
             <h6 class="alert-heading">
-                <i class="bi bi-check-circle"></i> Resultado
+                <i class="bi bi-check-circle"></i> Resultado Final
             </h6>
 
             <ul class="mb-0 small">
                 <li>Modelo Producto creado</li>
+                <li>Migración ejecutada</li>
                 <li>Controlador funcionando</li>
-                <li>Migración configurada</li>
-                <li>Ruta registrada</li>
-                <li>Menú en AdminLTE visible</li>
-                <li>Módulo Producto funcionando correctamente</li>
+                <li>Vista con plantilla AdminLTE</li>
+                <li>Ruta configurada</li>
+                <li>Menú Producto visible en AdminLTE</li>
+                <li>Módulo funcionando correctamente</li>
             </ul>
         </div>
 
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
