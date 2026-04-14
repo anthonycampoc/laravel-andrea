@@ -846,10 +846,7 @@ php artisan config:cache
 <div class="card-header bg-primary text-white">4. CreateProducto.php COMPLETO</div>
 <div class="card-body">
 <pre class="bg-dark text-white p-3">
-&lt;
-
-
-<?php
+&lt;?php
 
 namespace App\Livewire\Producto;
 
@@ -859,7 +856,7 @@ use Livewire\Attributes\On;
 
 class CreateProducto extends Component
 {
-    public $nombre;
+  public $nombre;
     public $producto_id;
     public $edit = false;
 
@@ -907,7 +904,6 @@ class CreateProducto extends Component
         return view('livewire.producto.create-producto');
     }
 }
-
 </pre>
 </div>
 </div>
@@ -942,11 +938,7 @@ class CreateProducto extends Component
 <div class="card-header bg-warning">5. ListProducto.php COMPLETO</div>
 <div class="card-body">
 <pre class="bg-dark text-white p-3">
-&lt;
-
-
-
-<?php
+&lt;?php
 
 namespace App\Livewire\Producto;
 
@@ -956,7 +948,6 @@ use Livewire\Attributes\On;
 
 class ListProducto extends Component
 {
-
      public function edit($producto)
     {
 
@@ -969,15 +960,13 @@ class ListProducto extends Component
         // Livewire refresca automáticamente
     }
 
-    
     public function render()
     {
-         $productos = Producto::orderBy('id','desc')->get();
+        $productos = Producto::orderBy('id','desc')->get();
 
-        return view('livewire.producto.list-producto', compact('productos') );
+        return view('livewire.producto.list-producto', compact('productos'));
     }
 }
-
 </pre>
 </div>
 </div>
