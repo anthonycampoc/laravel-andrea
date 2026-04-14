@@ -799,6 +799,247 @@ php artisan config:cache
 
     </div>
 </div>
+
+
+<div class="container mt-4">
+
+<h2 class="mb-4 text-primary">GUÍA COMPLETA CRUD PRODUCTO - LIVEWIRE</h2>
+
+<!-- PASO 1 -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-dark text-white">1. Abrir Terminal</div>
+<div class="card-body">
+<span class="badge bg-primary">CTRL + J</span>
+</div>
+</div>
+
+<!-- PASO 2 -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-success text-white">2. Crear Componentes</div>
+<div class="card-body">
+<p>Ejecutar uno por uno:</p>
+<pre class="bg-dark text-white p-3">php artisan make:livewire Producto/CreateProducto</pre>
+<pre class="bg-dark text-white p-3">php artisan make:livewire Producto/ListProducto</pre>
+</div>
+</div>
+
+<!-- RUTAS ARCHIVOS -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-info text-white">3. Rutas (CORREGIDAS)</div>
+<div class="card-body">
+    <p><strong>📁 Componentes (clases Livewire):</strong></p>
+    <div class="alert alert-primary">app/Livewire/Producto/CreateProducto.php</div>
+    <div class="alert alert-primary">app/Livewire/Producto/ListProducto.php</div>
+
+    <p><strong>📄 Vistas Blade de Livewire:</strong></p>
+    <div class="alert alert-warning">resources/views/livewire/producto/create-producto.blade.php</div>
+    <div class="alert alert-warning">resources/views/livewire/producto/list-producto.blade.php</div>
+
+    <p><strong>📄 Vista principal (AdminLTE):</strong></p>
+    <div class="alert alert-success">resources/views/admin/producto/index.blade.php</div>
+</div>
+</div>
+</div>
+
+<!-- CREATE COMPONENT -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-primary text-white">4. CreateProducto.php COMPLETO</div>
+<div class="card-body">
+<pre class="bg-dark text-white p-3">
+&lt;?php
+
+namespace App\Livewire\Producto;
+
+use Livewire\Component;
+use App\Models\Producto;
+
+class CreateProducto extends Component
+{
+    public $nombre;
+    public $producto_id;
+    public $edit = false;
+
+    protected $listeners = ['edit-producto' => 'edit'];
+
+    protected function rules()
+    {
+        return [
+            'nombre' => 'required'
+        ];
+    }
+
+    protected $messages = [
+        'nombre.required' => 'El nombre es obligatorio'
+    ];
+
+    public function edit($data)
+    {
+        $this->producto_id = $data['id'];
+        $this->nombre = $data['nombre'];
+        $this->edit = true;
+    }
+
+    public function save()
+    {
+        $this->validate();
+
+        if ($this->edit) {
+            Producto::find($this->producto_id)->update([
+                'nombre' => $this->nombre
+            ]);
+        } else {
+            Producto::create([
+                'nombre' => $this->nombre
+            ]);
+        }
+
+        $this->reset(['nombre','producto_id','edit']);
+
+        $this->emit('producto-list-refresh');
+    }
+
+    public function render()
+    {
+        return view('livewire.producto.create-producto');
+    }
+}
+</pre>
+</div>
+</div>
+
+<!-- CREATE BLADE -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-secondary text-white">create-producto.blade.php COMPLETO</div>
+<div class="card-body">
+<pre class="bg-dark text-white p-3">
+&lt;div class="card"&gt;
+ &lt;div class="card-body"&gt;
+
+  &lt;h5&gt;{{ $edit ? 'Actualizar Producto' : 'Crear Producto' }}&lt;/h5&gt;
+
+  &lt;div class="mb-2"&gt;
+   &lt;input type="text" wire:model="nombre" class="form-control" placeholder="Nombre"&gt;
+   @error('nombre') &lt;span class="text-danger"&gt;{{ $message }}&lt;/span&gt; @enderror
+  &lt;/div&gt;
+
+  &lt;button class="btn btn-primary" wire:click="save"&gt;
+   {{ $edit ? 'Actualizar' : 'Guardar' }}
+  &lt;/button&gt;
+
+ &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+</div>
+</div>
+
+<!-- LIST COMPONENT -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-warning">5. ListProducto.php COMPLETO</div>
+<div class="card-body">
+<pre class="bg-dark text-white p-3">
+&lt;?php
+
+namespace App\Livewire\Producto;
+
+use Livewire\Component;
+use App\Models\Producto;
+
+class ListProducto extends Component
+{
+    protected $listeners = ['producto-list-refresh' => '$refresh'];
+
+    public function edit($producto)
+    {
+        $this->emit('edit-producto', $producto);
+    }
+
+    public function render()
+    {
+        $productos = Producto::orderBy('id','desc')->get();
+
+        return view('livewire.producto.list-producto', compact('productos'));
+    }
+}
+</pre>
+</div>
+</div>
+
+<!-- LIST BLADE -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-danger text-white">list-producto.blade.php COMPLETO</div>
+<div class="card-body">
+<pre class="bg-dark text-white p-3">
+&lt;div class="card"&gt;
+ &lt;div class="card-body"&gt;
+
+  &lt;h5&gt;Lista de Productos&lt;/h5&gt;
+
+  &lt;table class="table table-bordered table-striped"&gt;
+   &lt;thead&gt;
+    &lt;tr&gt;
+     &lt;th&gt;ID&lt;/th&gt;
+     &lt;th&gt;Nombre&lt;/th&gt;
+     &lt;th&gt;Acciones&lt;/th&gt;
+    &lt;/tr&gt;
+   &lt;/thead&gt;
+   &lt;tbody&gt;
+    @foreach($productos as $producto)
+    &lt;tr&gt;
+     &lt;td&gt;{{ $producto->id }}&lt;/td&gt;
+     &lt;td&gt;{{ $producto->nombre }}&lt;/td&gt;
+     &lt;td&gt;
+      &lt;button class="btn btn-warning btn-sm"
+       wire:click="edit({{ $producto }})"&gt;
+       Editar
+      &lt;/button&gt;
+     &lt;/td&gt;
+    &lt;/tr&gt;
+    @endforeach
+   &lt;/tbody&gt;
+  &lt;/table&gt;
+
+ &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+</div>
+</div>
+
+<!-- INDEX FINAL -->
+<div class="card mb-4 shadow">
+<div class="card-header bg-dark text-white">6. index.blade.php COMPLETO</div>
+<div class="card-body">
+<div class="alert alert-success">resources/views/admin/producto/index.blade.php</div>
+
+<pre class="bg-dark text-white p-3">
+@extends('adminlte::page')
+
+@section('title', 'Producto')
+
+@section('content_header')
+ &lt;h1&gt;Productos&lt;/h1&gt;
+@stop
+
+@section('content')
+
+&lt;div class="row"&gt;
+
+ &lt;div class="col-md-4"&gt;
+  @livewire('producto.create-producto')
+ &lt;/div&gt;
+
+ &lt;div class="col-md-8"&gt;
+  @livewire('producto.list-producto')
+ &lt;/div&gt;
+
+&lt;/div&gt;
+
+@stop
+</pre>
+</div>
+</div>
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
