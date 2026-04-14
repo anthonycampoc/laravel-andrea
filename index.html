@@ -848,10 +848,13 @@ php artisan config:cache
 <pre class="bg-dark text-white p-3">
 &lt;?php
 
+<?php
+
 namespace App\Livewire\Producto;
 
 use Livewire\Component;
 use App\Models\Producto;
+use Livewire\Attributes\On;
 
 class CreateProducto extends Component
 {
@@ -859,19 +862,18 @@ class CreateProducto extends Component
     public $producto_id;
     public $edit = false;
 
-    protected $listeners = ['edit-producto' => 'edit'];
-
-    protected function rules()
+     protected function rules()
     {
         return [
             'nombre' => 'required'
         ];
     }
 
-    protected $messages = [
+     protected $messages = [
         'nombre.required' => 'El nombre es obligatorio'
     ];
-
+    
+    #[On('edit-producto')]
     public function edit($data)
     {
         $this->producto_id = $data['id'];
@@ -895,7 +897,8 @@ class CreateProducto extends Component
 
         $this->reset(['nombre','producto_id','edit']);
 
-        $this->emit('producto-list-refresh');
+        $this->dispatch('producto-list-refresh');
+    
     }
 
     public function render()
@@ -903,6 +906,7 @@ class CreateProducto extends Component
         return view('livewire.producto.create-producto');
     }
 }
+
 </pre>
 </div>
 </div>
@@ -939,27 +943,38 @@ class CreateProducto extends Component
 <pre class="bg-dark text-white p-3">
 &lt;?php
 
+<?php
+
 namespace App\Livewire\Producto;
 
 use Livewire\Component;
 use App\Models\Producto;
+use Livewire\Attributes\On;
 
 class ListProducto extends Component
 {
-    protected $listeners = ['producto-list-refresh' => '$refresh'];
 
-    public function edit($producto)
+     public function edit($producto)
     {
-        $this->emit('edit-producto', $producto);
+
+        $this->dispatch('edit-producto', data: $producto);
     }
 
+    #[On('producto-list-refresh')]
+    public function refresh()
+    {
+        // Livewire refresca automáticamente
+    }
+
+    
     public function render()
     {
-        $productos = Producto::orderBy('id','desc')->get();
+         $productos = Producto::orderBy('id','desc')->get();
 
-        return view('livewire.producto.list-producto', compact('productos'));
+        return view('livewire.producto.list-producto', compact('productos') );
     }
 }
+
 </pre>
 </div>
 </div>
