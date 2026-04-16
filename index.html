@@ -1013,18 +1013,18 @@ class ListProducto extends Component
        Editar
       &lt;/button&gt;
 
-      <div class="custom-control custom-switch">
-                                {{-- El ID del switch y el click ahora usan el ID numérico --}}
-                                <input type="checkbox" 
-                                    class="custom-control-input" 
-                                    id="status_{{ $producto->id }}"
-                                    wire:click="interruptor({{ $producto->id }})"
-                                    @checked($producto->estado)>
-                                
-                                <label class="custom-control-label" for="status_{{ $producto->id }}">
-                                    {{ $producto->estado ? 'Activo' : 'Inactivo' }}
-                                </label>
-        </div>
+    &lt;/div&gt; class=&quot;form-check form-switch d-inline-block ms-2&quot;&gt;
+    &lt;/input&gt; class=&quot;form-check-input&quot; 
+           type=&quot;checkbox&quot; 
+           role=&quot;switch&quot; 
+           id=&quot;status_{{ $producto-&gt;id }}&quot;
+           wire:click=&quot;interruptor({{ $producto-&gt;id }})&quot;
+           @checked($producto-&gt;estado)&gt;
+    
+    &lt;/label&gt; class=&quot;form-check-label&quot; for=&quot;status_{{ $producto-&gt;id }}&quot;&gt;
+        {{ $producto-&gt;estado ? &#39;Activo&#39; : &#39;Inactivo&#39; }}
+    &lt;/label&gt;
+  &lt;/div&gt;
      &lt;/td&gt;
     &lt;/tr&gt;
     @endforeach
