@@ -182,7 +182,7 @@ php artisan make:model Producto -m
 Schema::create('proveedores', function (Blueprint $table) {
     $table->id();
     $table->string('nombre');
-    $table->string('correo')->nullable();
+   $table->boolean('estado')->default(true);
     $table->timestamps();
 });
 </pre>
@@ -218,7 +218,7 @@ Schema::create('productos', function (Blueprint $table) {
 <pre class="bg-dark text-white p-3 rounded">
 class Proveedor extends Model
 {
-    protected $fillable = ['nombre', 'correo'];
+    protected $fillable = ['nombre', 'estado'];
 
     public function productos()
     {
@@ -634,7 +634,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre','estado'];
 }
 </code>
         </pre>
@@ -651,6 +651,8 @@ class Producto extends Model
 Schema::create('productos', function (Blueprint $table) {
     $table->id();
     $table->string('nombre');
+    $table->boolean('estado')->default(true);
+
     $table->timestamps();
 });
 </code>
@@ -960,6 +962,17 @@ class ListProducto extends Component
         // Livewire refresca automáticamente
     }
 
+    public function interruptor($id){
+
+        $producto = Producto::find($id);
+
+        if($producto){
+            $producto->estado = !$producto->estado;
+            $producto->save();
+        }
+
+    }
+
     public function render()
     {
         $productos = Producto::orderBy('id','desc')->get();
@@ -999,6 +1012,19 @@ class ListProducto extends Component
        wire:click="edit({{ $producto }})"&gt;
        Editar
       &lt;/button&gt;
+
+      <div class="custom-control custom-switch">
+                                {{-- El ID del switch y el click ahora usan el ID numérico --}}
+                                <input type="checkbox" 
+                                    class="custom-control-input" 
+                                    id="status_{{ $producto->id }}"
+                                    wire:click="interruptor({{ $producto->id }})"
+                                    @checked($producto->estado)>
+                                
+                                <label class="custom-control-label" for="status_{{ $producto->id }}">
+                                    {{ $producto->estado ? 'Activo' : 'Inactivo' }}
+                                </label>
+        </div>
      &lt;/td&gt;
     &lt;/tr&gt;
     @endforeach
