@@ -662,6 +662,24 @@ Schema::create('productos', function (Blueprint $table) {
 
         <pre class="bg-dark text-black p-3"><code>php artisan migrate</code></pre>
 
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed text-danger" data-bs-toggle="collapse" data-bs-target="#fresh">
+                    php artisan migrate:fresh
+                </button>
+            </h2>
+            <div id="fresh" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <strong>⚠️ Elimina todas las tablas y las vuelve a crear.</strong>
+                    <ul>
+                        <li>Usar solo en desarrollo</li>
+                        <li>Cuando hay errores de migración</li>
+                        <li>No usar en producción</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <!-- PASO 5 -->
         <h5 class="card-title mt-4">
             <i class="bi bi-5-circle"></i> Configurar el Controlador
